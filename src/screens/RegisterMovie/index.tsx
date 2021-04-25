@@ -39,19 +39,13 @@ const RegisterMovie = (() => {
 
             const img = await ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
-                aspect: [16, 9],
+                aspect: [4, 4],
                 base64: true,
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 quality: 0.5
             });
-            if (img.cancelled) {
-                console.log("entrou")
-                createMovie();
-            } else {
-                setImageDefaultMovie(img);
-            }
 
-
+            setImageDefaultMovie(img);
         } else {
             ToastAndroid.show('Permissão necessária para acessar a galeria de fotos',
                 ToastAndroid.LONG);
@@ -67,10 +61,9 @@ const RegisterMovie = (() => {
                         <Image source={imageDefaultMovie}
                             style={styles.imageConfig}
                         />
-
-                        {/* <Text>Selecionar imagem</Text> */}
                     </TouchableOpacity>
                 </View>
+                <Text style={styles.imageInputText}>Selecionar imagem</Text>
                 <Formik
                     initialValues={{ Id: '', Name: '', Sinopse: '', ReleaseDate: '', Genre: '', image: '' }}
                     validationSchema={Yup.object().shape({
@@ -83,7 +76,6 @@ const RegisterMovie = (() => {
                 >
                     {({ values, setFieldValue, handleChange, errors, handleSubmit, isSubmitting, isValid, touched, handleBlur }) => (
                         <View style={styles.formikView}>
-
                             <View style={styles.inputView}>
                                 <Input
                                     inputStyle={styles.inputConfig}

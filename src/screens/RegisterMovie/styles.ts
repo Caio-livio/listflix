@@ -7,12 +7,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         color: 'white',
         backgroundColor: 'black',
-        // marginTop: 50
     },
     placeHolderColor: {
         color: 'white',
     },
-    // remover depois
     iconColor: {
         color: 'red',
     },
@@ -32,9 +30,8 @@ const styles = StyleSheet.create({
     },
     imageConfig: {
         width: 200,
-        height: 200,
+        height: 150,
     },
-    // remover depois
     inputConfig: {
         paddingLeft: 10,
         color: 'white',
@@ -77,10 +74,21 @@ const styles = StyleSheet.create({
     imageContainer: {
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 400,
+        borderRadius: 30,
+        marginTop: 25,
+        // marginLeft: '10%',
+        // marginRight: '10%',
+        marginHorizontal: '25%',
+        width: "50%"
     },
     imageContainerText: {
-        fontSize: 20
+        fontSize: 25
+    },
+    imageInputText: {
+        paddingBottom: 20,
+        fontSize: 20,
+        textAlign: 'center',
+        color: 'white'
     }
 });
 
