@@ -7,49 +7,34 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         color: 'black'
     },
-    imgProps: {
-        height: 300,
-        width: 300,
-    },
-    text: {
-        color: 'black',
-        fontSize: 20,
+    textTitle: {
+        marginTop: 40,
+        color: 'white',
+        fontSize: 30,
         textAlign: 'center', 
         alignItems: 'center'
     },
-    scrollViewContainer: {
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignContent: 'center',
-        marginBottom: 50,
+    textSubtitle: {
+        fontSize: 20, 
+        color: 'white', 
+        textAlign: 'center', 
+        marginTop: 20,
     },
-    cardContainer: {
-        borderColor: 'red',
-        backgroundColor: 'white',
-        color: 'white',
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 10,
-    },
-    cardImage: {
-        height: 300,
-        width: 310,
-    },
-    cardTitle: {
-        color: 'black',
-        fontSize: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
-    cardTitleBackground: {
-        backgroundColor: 'red',
-    }, 
-    cardDivider: {
-        backgroundColor: 'red',
+    buttonContainer: {
         marginTop: 10,
+        backgroundColor: 'black',
+        marginHorizontal: 10,
+        justifyContent: 'center',
+        borderRadius: 50
     },
+    button: {
+        marginTop: 10,
+        backgroundColor: 'red',
+        borderRadius: 100,
+        width: '100%',
+        height: '35%',
+        fontSize: 100
+    }
 });
 
 export default styles;
