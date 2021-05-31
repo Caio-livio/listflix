@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Button, Input } from 'react-native-elements';
+import firebase from 'firebase';
 
 import Toolbar from '../../components/toolbar';
 
@@ -15,12 +17,22 @@ interface Data {
   password: string,
 }
 
-const createNewUser = () => {
-  console.log('usuário criado com sucesso!')
-  Alert.alert('Usuário cadastrado com sucesso!')
-}
-
 const Register = () => {
+  const nav = useNavigation();
+
+  const createNewUser = (values: Data) => {
+    firebase.auth().createUserWithEmailAndPassword(values.email, values.password)
+      .then(usuarioLogado => {
+        console.log(usuarioLogado.user)
+        if (usuarioLogado) {
+          Alert.alert('Usuário cadastrado com sucesso!')
+          nav.navigate('Home');
+        }
+      }).catch(erro => {
+        Alert.alert('Erro ao criar o usuário, favor tente novamente!')
+      })
+  }
+
   return (
     <>
       <Toolbar title='Cadastrar usuário' back />
@@ -31,7 +43,7 @@ const Register = () => {
           email: Yup.string().required('O campo email é obrigatório!'),
           password: Yup.string().required('O campo senha é obrigatório!').min(6, 'A senha precisa ter no mínimo 6 caracteres!'),
         })}
-        onSubmit={createNewUser}
+        onSubmit={values => createNewUser(values)}
       >
         {({ values, handleChange, errors, handleSubmit, isSubmitting, isValid, touched, handleBlur }) => (
           <View style={styles.container}>
@@ -71,7 +83,6 @@ const Register = () => {
         )}
 
       </Formik>
-
     </>
   )
 }

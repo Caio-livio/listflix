@@ -5,19 +5,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'black',
-        color: 'black'
     },
     textTitle: {
         marginTop: 40,
         color: 'white',
         fontSize: 30,
-        textAlign: 'center', 
+        textAlign: 'center',
         alignItems: 'center'
     },
     textSubtitle: {
-        fontSize: 20, 
-        color: 'white', 
-        textAlign: 'center', 
+        fontSize: 20,
+        color: 'white',
+        textAlign: 'center',
         marginTop: 20,
     },
     buttonContainer: {

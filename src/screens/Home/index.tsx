@@ -2,6 +2,13 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Card, Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
+import firebase from 'firebase';
+import {
+  AdMobBanner, //Banner
+  AdMobInterstitial, //Anuncio tela inteira
+  AdMobRewarded //Anuncio com premiação ao usuario
+} from 'expo-ads-admob';
+
 
 import Toolbar from '../../components/toolbar';
 
@@ -23,7 +30,7 @@ export default function App() {
     <>
       <View style={styles.container}>
         <View>
-          <Toolbar title='Home' back />
+          <Toolbar title='Home' />
           <Text style={styles.textTitle}>BEM VINDO(A) AO LISTFLIX</Text>
           <Text style={styles.textSubtitle}>O que você deseja fazer?</Text>
         </View>
@@ -40,8 +47,16 @@ export default function App() {
             onPress={RegisterMovie}
           >
           </Button>
+
         </View>
+
+
       </View>
+      <AdMobBanner
+        bannerSize="fullBanner"
+        adUnitID="ca-app-pub-3940256099942544/6300978111"
+        style={{ alignSelf: 'center' }}
+      />
     </>
   );
 }

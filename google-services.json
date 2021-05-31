@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "553944661278",
+    "project_id": "listflix-69ea4",
+    "storage_bucket": "listflix-69ea4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553944661278:android:9e4c7ab751d8ccab81dd0f",
+        "android_client_info": {
+          "package_name": "br.com.caiolivio.reactnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553944661278-onik4tj3m7v4d4odrq4adtmpg4b5c1ud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrDAuk8a0kQBYY0cl2w-nTOsPzuJdcDHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553944661278-onik4tj3m7v4d4odrq4adtmpg4b5c1ud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

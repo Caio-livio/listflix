@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     errors: {
-        color:"red", 
-        fontSize: 15, 
-        textAlign:"right"
+        color: "red",
+        fontSize: 15,
+        textAlign: "right"
     },
     viewInputConfig: {
-        flex:0.5, 
-        width: '100%', 
+        flex: 0.5,
+        width: '100%',
         padding: 30,
     }
 });

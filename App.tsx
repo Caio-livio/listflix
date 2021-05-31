@@ -1,18 +1,19 @@
 import React from 'react';
-import { Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { NavigationContainer } from '@react-navigation/native';
+import { firebaseConfig } from './src/config/firebase-config';
+import firebase from 'firebase';
 
-import styles from '../ListFlix/src/globalStyles/styles';
-import MainNavigator from './src/navigations';
+import Navigations from './src/navigations';
+
+firebase.initializeApp(firebaseConfig);
 
 export default function App() {
   return (
-    <>
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-        <MainNavigator />
-      </View>
-    </>
+    <NavigationContainer>
+      <StatusBar style="dark" />
+      <Navigations />
+    </NavigationContainer>
   );
 }
 

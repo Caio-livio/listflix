@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Alert, Platform, ToastAndroid, Image } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 import Toolbar from '../../components/toolbar';
 import defaultImageMovie from '../../assets/images/defaultImage.png';
@@ -15,20 +17,112 @@ import * as MediaLibrary from 'expo-media-library';
 
 import styles from './styles';
 
-type Data = Array<{
-    Id: string;
-    Name: string;
-    Sinopse: string;
-    ReleaseDate: string;
-    Genre: string;
-    Image: string;
-}>
+interface Data {
+    name: string;
+    sinopse: string;
+    releaseDate: string;
+    genre: string;
+    image: string;
+}
 
 const RegisterMovie = (() => {
-    const [imageDefaultMovie, setImageDefaultMovie] = useState<any>(defaultImageMovie);
+    const db = firebase.firestore()
+    const [imageDefaultMovie, setImageDefaultMovie] = useState<ImagePicker.ImagePickerResult>();
 
-    const createMovie = () => {
-        Alert.alert('Filme cadastrado com sucesso!')
+    const createMovie = async (values: Data) => {
+
+        let novoFilme: Data;
+
+        if (!imageDefaultMovie?.cancelled) {
+
+
+            const imagem = await fetch(imageDefaultMovie?.uri || '');
+
+            const blobImagem = await imagem.blob();
+            const imagemRef = firebase.storage()
+                .ref()
+                .child(`imagens/${firebase.auth().currentUser?.uid}/${Math.random().toString()}`);
+
+            await imagemRef.put(blobImagem);
+
+            let linkImage = '';
+
+            await imagemRef.getDownloadURL().then(link => {
+                if (link) {
+                    linkImage = link;
+                }
+            });
+
+            novoFilme = {
+                name: values.name,
+                sinopse: values.sinopse,
+                releaseDate: values.releaseDate,
+                genre: values.genre,
+                image: linkImage,
+            };
+        } else {
+            novoFilme = {
+                name: values.name,
+                sinopse: values.sinopse,
+                releaseDate: values.releaseDate,
+                genre: values.genre,
+                image: defaultImageMovie.uri,
+            };
+        }
+
+
+        db.collection('usuario').doc(firebase.auth().currentUser?.uid).get().then(resultado => {
+            if (resultado.exists) {
+                db.collection('usuario').doc(firebase.auth().currentUser?.uid).update({
+                    lista: firebase.firestore.FieldValue.arrayUnion(novoFilme),
+                }).then(() => {
+                    Alert.alert(
+                        "Filme foi cadastrado com sucesso!",
+                        '',
+                        [
+                            { text: "OK" }
+                        ]
+                    );
+                }).catch(() => {
+                    Alert.alert(
+                        "Erro ao cadastrar filme, por favor tente novamente!",
+                        '',
+                        [
+                            { text: "OK" }
+                        ]
+                    );
+                });
+            } else {
+                db.collection('usuario').doc(firebase.auth().currentUser?.uid).set({
+                    lista: [
+                        {
+                            name: novoFilme.name,
+                            sinopse: novoFilme.sinopse,
+                            releaseDate: values.releaseDate,
+                            genre: novoFilme.genre,
+                            image: novoFilme.image,
+                        }
+                    ]
+
+                }).then(() => {
+                    Alert.alert(
+                        "Filme foi cadastrado com sucesso!",
+                        '',
+                        [
+                            { text: "OK" }
+                        ]
+                    );
+                }).catch(() => {
+                    Alert.alert(
+                        "Erro ao cadastrar filme, por favor tente novamente!",
+                        '',
+                        [
+                            { text: "OK" }
+                        ]
+                    );
+                });
+            }
+        });
     }
 
     const openPhotoLibrary = async () => {
@@ -58,19 +152,19 @@ const RegisterMovie = (() => {
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <TouchableOpacity onPress={() => openPhotoLibrary()}>
-                        <Image source={imageDefaultMovie}
+                        <Image source={imageDefaultMovie ? imageDefaultMovie : defaultImageMovie}
                             style={styles.imageConfig}
                         />
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.imageInputText}>Selecionar imagem</Text>
                 <Formik
-                    initialValues={{ Id: '', Name: '', Sinopse: '', ReleaseDate: '', Genre: '', image: '' }}
+                    initialValues={{ name: '', sinopse: '', releaseDate: '', genre: '' }}
                     validationSchema={Yup.object().shape({
-                        Name: Yup.string().required('Informe o nome do filme'),
-                        Sinopse: Yup.string().required('Informe a sinopse do filme'),
-                        ReleaseDate: Yup.string().required('Informe a data de lançamento do filme'),
-                        Genre: Yup.string().required('Informe o gênero do filme'),
+                        name: Yup.string().required('Informe o nome do filme'),
+                        sinopse: Yup.string().required('Informe a sinopse do filme'),
+                        releaseDate: Yup.string().required('Informe a data de lançamento do filme'),
+                        genre: Yup.string().required('Informe o gênero do filme'),
                     })}
                     onSubmit={createMovie}
                 >
@@ -81,37 +175,37 @@ const RegisterMovie = (() => {
                                     inputStyle={styles.inputConfig}
                                     placeholder="Nome"
                                     placeholderTextColor="white"
-                                    onChangeText={handleChange("Name")}
-                                    onBlur={handleBlur("Name")}
+                                    onChangeText={handleChange("name")}
+                                    onBlur={handleBlur("name")}
                                 />
-                                {touched.Name && <Text style={styles.errors}>{errors.Name}</Text>}
+                                {touched.name && <Text style={styles.errors}>{errors.name}</Text>}
 
                                 <Input
                                     inputStyle={styles.inputConfig}
                                     placeholder="Sinopse"
                                     placeholderTextColor="white"
-                                    onChangeText={handleChange("Sinopse")}
-                                    onBlur={handleBlur("Sinopse")}
+                                    onChangeText={handleChange("sinopse")}
+                                    onBlur={handleBlur("sinopse")}
                                 />
-                                {touched.Sinopse && <Text style={styles.errors}>{errors.Sinopse}</Text>}
+                                {touched.sinopse && <Text style={styles.errors}>{errors.sinopse}</Text>}
 
                                 <Input
                                     inputStyle={styles.inputConfig}
                                     placeholder="Data de Lançamento"
                                     placeholderTextColor="white"
-                                    onChangeText={handleChange("ReleaseDate")}
-                                    onBlur={handleBlur("ReleaseDate")}
+                                    onChangeText={handleChange("releaseDate")}
+                                    onBlur={handleBlur("releaseDate")}
                                 />
-                                {touched.ReleaseDate && <Text style={styles.errors}>{errors.ReleaseDate}</Text>}
+                                {touched.releaseDate && <Text style={styles.errors}>{errors.releaseDate}</Text>}
 
                                 <Input
                                     inputStyle={styles.inputConfig}
                                     placeholder="Gênero"
                                     placeholderTextColor="white"
-                                    onChangeText={handleChange("Genre")}
-                                    onBlur={handleBlur("Genre")}
+                                    onChangeText={handleChange("genre")}
+                                    onBlur={handleBlur("genre")}
                                 />
-                                {touched.Genre && <Text style={styles.errors}>{errors.Genre}</Text>}
+                                {touched.genre && <Text style={styles.errors}>{errors.genre}</Text>}
                             </View>
                             {isSubmitting && <ActivityIndicator size={30} />}
                             {!isSubmitting && <Button title='Salvar' disabled={!isValid} buttonStyle={styles.buttonColor} onPress={() => handleSubmit()}></Button>}

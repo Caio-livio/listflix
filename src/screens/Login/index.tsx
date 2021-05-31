@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import firebase from 'firebase';
 import { Input, Button } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
@@ -18,22 +19,20 @@ const Login = () => {
 
     const nav = useNavigation();
     const [error, setError] = useState('');
-    
+
     const Register = () => {
-            nav.navigate('Register')
+        nav.navigate('Register')
     }
 
     const UserLogin = async (data: User) => {
-        await new Promise<void> (resolve => setTimeout(() => resolve(), 2000))
-        console.log(data)
-        if (data.email == 'teste@teste.com' && data.password == '123456') {
-            nav.navigate('Home');
-            console.log('Login realizado com sucesso')
-        }
-        else {
-            console.log('email ou senha incorreto')
-            Alert.alert('erro, senha ou email incorreto')
-        }
+        firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+            .then(usuarioLogado => {
+                if (usuarioLogado) {
+                    nav.navigate('Home');
+                }
+            }).catch(erro => {
+                Alert.alert('erro, senha ou email incorreto')
+            })
     }
 
     return (
@@ -60,7 +59,7 @@ const Login = () => {
                                 onChangeText={handleChange("email")}
                                 onBlur={handleBlur("email")}
                             />
-                            
+
                             { touched.email && <Text style={styles.errors}>{errors.email}</Text>}
 
                             <Input
@@ -80,12 +79,12 @@ const Login = () => {
                             { error != "" && <Text style={styles.errors}>{error}</Text>}
                         </View>
                     )}
-                    
+
                 </Formik>
                 <View>
-                <TouchableOpacity onPress={Register}>
-                    <Text style={styles.textCreatAccount}>Cadastre-se</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={Register}>
+                        <Text style={styles.textCreatAccount}>Cadastre-se</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </>
